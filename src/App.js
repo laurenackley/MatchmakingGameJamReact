@@ -1,67 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
-import React, {useEffect, useState} from 'react';
+import "./App.css";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ListAllLobbies from './lobbies';
-const baseURL = "http://matchmaking.braymatter.com:8091/api/v1/matchmaking/ephemeral/lobbies";
+// const baseURL = "http://matchmaking.braymatter.com:8091/api/v1/matchmaking/ephemeral/lobbies";
+const baseURL = "http://localhost:8091/api/v1/matchmaking/ephemeral/lobbies";
 
-// const express = require('express');
-// const request = require('request');
 
-// const app = express();
-
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   next();
-// });
-
-// app.get('', (req, res) => {
-//   request(
-//     { url: {baseURL}},
-//     (error, response, body) => {
-//       if(error || response.statusCode !==200){
-//         return res.status(500).json({type: 'error', message: error.message});
-//       }
-//       res.json(JSON.parse(body));
-//     }
-//     )
-//   });
-  
-  
-  function App() {
+function App() {
   const [lobbies, setLobbies] = useState([]);
-
+//   const lobbies = [{ip: '', autoRestart: '', hasPassword: '', lastUpdated: '',
+// name: '', playerCapacity: '', slotsOccupied: ''},];
   useEffect(() => {
-      axios.get(baseURL).then((response) => {
-        response.headers("Access-Control-Allow-Origin", "*");
-        setLobbies(response.data)
-      });
-  }, );
-
-  useEffect(() => {
-    const interval = setInterval(()=> {
-      console.log('Run every second');
-    },1000);
-    return () => clearInterval(interval)
+    axios.get(baseURL).then((response) => {
+      // console.log(response.data.url);
+      console.log("in axios");
+      console.log(response.data);
+      const data = JSON.stringify(response.data);
+      console.log("raw "+ data);
+      setLobbies(data);
+      // const newLobby = {
+      //   ip: response.data.ip, 
+      //   autoRestart: response.data.autoRestart,
+      //   hasPassword: response.data.hasPassword,
+      //   lastUpdated: response.data.lastUpdated,
+      //   name: response.data.name,
+      //   playerCapacity: response.data.playerCapacity,
+      //   slotsOccupied: response.data.slotsOccupied
+      // }
+      // setLobbies.push(newLobby);
+      // console.log("Lobbies "+ lobbies +" data");
+      // return response.data;
+    });
   }, []);
-const lobbyElements = lobbies.map((lobby, index) => <div key={index}>
-  <h1>{lobby.name}</h1>
-</div>)
-if(!lobbies) return null;
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     console.log("Run every second");
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
+
+
+
+  console.log(lobbies+ "lobbies");
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <div className="App=intro">
           <h2>Lobby List</h2>
-          {lobbyElements}
-
+          {lobbies}
         </div>
       </header>
-      <body>
+      <div className="Hello">
         <h1>Hello</h1>
-      <ListAllLobbies />
-      </body>
+        {/* {results} */}
+      </div>
     </div>
   );
 }

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import  { useRouter } from 'next/router';
+import   Router from 'node/router';
 
 export default function ListAllLobbies() {
-    const router = useRouter();
+    const router = Router();
 
     const [dataResponse, setDataResponse] = useState([]);
 
     useEffect(() => {
         async function getPageData(){
-        const apiUrlEndpoint = "http://matchmaking.braymatter.com:8091/api/v1/matchmaking/ephemeral/lobbies";
+        const apiUrlEndpoint = "http://matchmaking.braymatter.com:8091/api/v1/matchmaking/ephemeral/lobbies/";
         const getData = {
             method: "GET",
             headers: {"Content-Type": "application/json"},
@@ -20,9 +20,12 @@ export default function ListAllLobbies() {
         setDataResponse(res.lobbies);
         }
         getPageData();
-    }, [router.query, router.isReady]);
+    }, 
+    [router.query, router.isReady]
+    );
     return (
         <div className="ListAllLobbies">
+            <div>Test</div>
             {dataResponse?.map((lobby)=>{
                 return(
                     <div key="lobby">
