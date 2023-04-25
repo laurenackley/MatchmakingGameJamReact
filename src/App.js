@@ -4,55 +4,48 @@ import axios from "axios";
 // const baseURL = "http://matchmaking.braymatter.com:8091/api/v1/matchmaking/ephemeral/lobbies";
 const baseURL = "http://localhost:8091/api/v1/matchmaking/ephemeral/lobbies";
 
-
 function App() {
   const [lobbies, setLobbies] = useState([]);
-//   const lobbies = [{ip: '', autoRestart: '', hasPassword: '', lastUpdated: '',
-// name: '', playerCapacity: '', slotsOccupied: ''},];
+
   useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      // console.log(response.data.url);
-      console.log("in axios");
-      console.log(response.data);
-      const data = JSON.stringify(response.data);
-      console.log("raw "+ data);
-      setLobbies(data);
-      // const newLobby = {
-      //   ip: response.data.ip, 
-      //   autoRestart: response.data.autoRestart,
-      //   hasPassword: response.data.hasPassword,
-      //   lastUpdated: response.data.lastUpdated,
-      //   name: response.data.name,
-      //   playerCapacity: response.data.playerCapacity,
-      //   slotsOccupied: response.data.slotsOccupied
-      // }
-      // setLobbies.push(newLobby);
-      // console.log("Lobbies "+ lobbies +" data");
-      // return response.data;
-    });
+    axios
+      .get(baseURL)
+      .then((response) => {
+        const data = response.data;
+        setLobbies((lobbies) => data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     console.log("Run every second");
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  setTimeout(function () {
+    window.location.reload(1);
+  }, 5000);
 
-
-
-  console.log(lobbies+ "lobbies");
   return (
     <div className="App">
       <header className="App-header">
         <div className="App=intro">
-          <h2>Lobby List</h2>
-          {lobbies}
+          <h1>Lobby List</h1>
+          <div></div>
         </div>
       </header>
-      <div className="Hello">
-        <h1>Hello</h1>
-        {/* {results} */}
+      <div>
+        {Object.keys(lobbies).map((key, value) => {
+          let lobby = lobbies[key];
+          return (
+            <div>
+              IP: {lobby.ip} <br />
+              Name: {lobby.name}<br />
+              Player Capacity: {lobby.playerCapacity}<br />
+              Players in Lobby: {lobby.playerAmount} <br />
+              Pin: {lobby.pin}<br />
+              Restart Game on Finish: {lobby.restartGameOnFinish}<br />
+
+            </div>
+          );
+        })}
       </div>
     </div>
   );
